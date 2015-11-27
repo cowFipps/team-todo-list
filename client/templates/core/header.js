@@ -1,11 +1,14 @@
 Template.header.rendered = function() {
-  
+
   //pause after render and then initialize materialize functions
   Meteor.setTimeout(function() {
 
-    this.$('.button-collapse').sideNav({
-      closeOnClick: true
-    });
+
+  // Initialize collapse button
+  this.$(".button-collapse").sideNav();
+  // Initialize collapsible (uncomment the line below if you use the dropdown variation)
+  // this.$('.collapsible').collapsible();
+
 
   }.bind(this), 200);
 

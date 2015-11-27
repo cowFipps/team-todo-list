@@ -1,11 +1,16 @@
 <template name="mainLayout">
-  
-  {{> header}}
+  <header>
+    {{> header}}
+  </header>
 
-  <div class="section">
-  	{{> yield}}
-  </div>
+  <main>
+    <div class="section">
+    	{{> yield}}
+    </div>
+  </main>
 
-  {{> footer}}
+  <footer>
+    {{> footer}}
+  </footer>
 
 </template>
