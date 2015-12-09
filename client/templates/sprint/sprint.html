@@ -1,0 +1,32 @@
+<template name="sprint">
+
+  <div class="container">
+    <h4>{{#each sprints}}{{startDate}} - {{endDate}}{{/each}}</h4>
+    <ul class="collection">
+      {{#each lists}}
+      <li class="collection-item avatar">
+        <img src="images/yuna.jpg" alt="" class="circle">
+        <h5 class="resourceName">{{ resourceName }}</h5>
+        <a href="" data-action="removeListFromSprint"> remove</a>
+        {{#each items}}
+          <div class="row">
+            <div class="col s1">
+              <input type="checkbox" id="check-{{_id}}" data-action="markComplete" {{itemStatus}}/>
+              <label for="check-{{_id}}"></label>
+            </div>
+            <div class="col s10">
+              <input placeholder="Fill in task" name="body" id="body-{{_id}}" type="text" class="validate" value="{{itemBody}}" data-action="updateItemBody">
+            </div>
+            <div class="col s1">
+              <a href="#" id="close-{{_id}}" data-action="removeItem"><i class="material-icons small remove-item">close</i></a>
+            </div>
+          </div>
+        {{/each}}
+        <a class="btn-floating btn-small waves-effect waves-light green left" data-action="addItem"><i class="material-icons left small">add</i>add</a>
+        <span class="secondary-content left">{{completeItemCount}}/{{totalItemCount}} complete</span>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+
+</template>

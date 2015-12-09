@@ -14,13 +14,46 @@ Template.header.rendered = function() {
 
 Template.header.helpers({
   resources: function(){
-    return resourcesCollection.find();
+    find({'post': {$ne : ""}})
+    return resourcesCollection.find({});
+  },
+  weekNumber: function(){
+    Date.prototype.getWeek = function() {
+      var determinedate = new Date();
+      determinedate.setFullYear(this.getFullYear(), this.getMonth(), this.getDate());
+      var D = determinedate.getDay();
+      if(D == 0) D = 7;
+      determinedate.setDate(determinedate.getDate() + (4 - D));
+      var YN = determinedate.getFullYear();
+      var ZBDoCY = Math.floor((determinedate.getTime() - new Date(YN, 0, 1, -6)) / 86400000);
+      var WN = 1 + Math.floor(ZBDoCY / 7);
+      return WN;
+    }
+
+    var mydate = new Date();
+    return mydate.getWeek();
   }
-})
+});
 
 Template.header.events({
-	'click [data-action=logout]': function(event) {
+	'click [data-action=addResourseToSprint]': function(event) {
     event.preventDefault();
-    AccountsTemplates.logout();
+    console.log('header this: ', this);
+    var alreadyInList = listsCollection.findOne({parentSprint: '5BMxKAm2RjTMMPAE5', resourceId: this._id});
+    if(typeof alreadyInList != 'undefined'){
+      Materialize.toast("Woahh doggy! You're already in the sprint!", 3000, 'red');
+    } else {
+      var added = listsCollection.insert({
+        parentSprint: '5BMxKAm2RjTMMPAE5',
+        resourceId: this._id,
+        resourceName: this.name
+      });
+
+      if(added){
+        Materialize.toast('Added to the list!', 3000, 'green');
+      } else {
+        Materialize.toast("We're have a little bit of trouble with your request...", 10000, 'red');
+      }
+    }
   }
 });

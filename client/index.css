@@ -19,3 +19,11 @@ main {
 .container {
   /*width:90%;*/
 }
+
+label {
+  margin: 17px 0px 0px 25px;
+}
+
+.remove-item {
+  margin-top: 15px;
+}
