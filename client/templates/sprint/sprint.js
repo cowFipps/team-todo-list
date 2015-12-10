@@ -1,7 +1,75 @@
+Template.sprint.rendered = function() {
+
+  // $(document).ready(function(){
+  //   // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+  //   $('.modal-trigger').leanModal();
+  // });
+
+};
+
 Template.sprint.helpers({
   sprints: function(){
     return sprintsCollection.find({});
   },
+  hasLists: function(){
+    console.log('hasLists: ', this.lists.count());
+    if(this.lists.count() > 0){
+      return true;
+    } else {
+      return false;
+    }
+  },
+  totalSprintItemCount: function(sprintId){
+    return itemsCollection.find({parentList: sprintId}).count();
+  }
+});
+
+Template.sprint.events({
+  // 'change [data-action=updateItemBody]': function(event){
+  //   event.preventDefault();
+  //
+  //   var updated = itemsCollection.update(this._id, {$set:{body: event.currentTarget.value}});
+  //   console.log('updated: ', updated);
+  // },
+  // 'click [data-action=markComplete]': function(event){
+  //   event.preventDefault();
+  //   var status = itemsCollection.findOne(this._id).complete;
+  //   if(status === true){
+  //     itemsCollection.update(this._id, {$set:{complete: false}});
+  //   } else {
+  //     itemsCollection.update(this._id, {$set:{complete: true}});
+  //   }
+  // },
+  'click [data-action=removeListFromSprint]': function(event){
+    event.preventDefault();
+    var status = listsCollection.remove(this._id);
+    if(typeof status != 'undefined'){
+      Materialize.toast('Sad to see you go...', 3000, 'green');
+    } else {
+      Materialize.toast('uh oh... there was a problem...', 3000, 'red')
+    }
+  },
+  // 'click [data-action=removeItem]': function(event){
+  //   event.preventDefault();
+  //   itemsCollection.remove(this._id);
+  // },
+  // 'click [data-action=addItem]': function(event){
+  //   event.preventDefault();
+  //   itemsCollection.insert({parentList: this._id});
+  // }
+});
+
+Template.listItem.rendered = function() {
+
+  console.log('rendered: ', this.data._id);
+  var listId = '';
+  listId = 'remove-list-' + this.data._id;
+  console.log('#' + listId);
+  $('#' + listId).leanModal();
+
+};
+
+Template.listItem.helpers({
   lists: function(){
     //need to refine to lists only in this sprint
     return listsCollection.find({});
@@ -23,13 +91,13 @@ Template.sprint.helpers({
   totalItemCount: function(){
     return itemsCollection.find({parentList: this._id}).count();
   },
-  completeItemCount: function(){
+  completedItemCount: function(){
     console.log('parentList id: ', this._id);
     return itemsCollection.find({parentList: this._id, complete: true}).count();
   }
 });
 
-Template.sprint.events({
+Template.listItem.events({
   'change [data-action=updateItemBody]': function(event){
     event.preventDefault();
 
@@ -45,15 +113,15 @@ Template.sprint.events({
       itemsCollection.update(this._id, {$set:{complete: true}});
     }
   },
-  'click [data-action=removeListFromSprint]': function(event){
-    event.preventDefault();
-    var status = listsCollection.remove(this._id);
-    if(typeof status != 'undefined'){
-      Materialize.toast('Sad to see you go...', 3000, 'green')
-    } else {
-      Materialize.toast('uh oh... there was a problem...', 3000, 'red')
-    }
-  },
+  // 'click [data-action=removeListFromSprint]': function(event){
+  //   event.preventDefault();
+  //   var status = listsCollection.remove(this._id);
+  //   if(typeof status != 'undefined'){
+  //     Materialize.toast('Sad to see you go...', 3000, 'green')
+  //   } else {
+  //     Materialize.toast('uh oh... there was a problem...', 3000, 'red')
+  //   }
+  // },
   'click [data-action=removeItem]': function(event){
     event.preventDefault();
     itemsCollection.remove(this._id);
@@ -62,4 +130,4 @@ Template.sprint.events({
     event.preventDefault();
     itemsCollection.insert({parentList: this._id});
   }
-})
+});

@@ -39,12 +39,12 @@ Template.header.events({
 	'click [data-action=addResourseToSprint]': function(event) {
     event.preventDefault();
     console.log('header this: ', this);
-    var alreadyInList = listsCollection.findOne({parentSprint: '5BMxKAm2RjTMMPAE5', resourceId: this._id});
+    var alreadyInList = listsCollection.findOne({parentSprint: 'H6tBDD4La75rgH3jG', resourceId: this._id});
     if(typeof alreadyInList != 'undefined'){
       Materialize.toast("Woahh doggy! You're already in the sprint!", 3000, 'red');
     } else {
       var added = listsCollection.insert({
-        parentSprint: '5BMxKAm2RjTMMPAE5',
+        parentSprint: 'H6tBDD4La75rgH3jG',
         resourceId: this._id,
         resourceName: this.name
       });
