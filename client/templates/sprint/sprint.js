@@ -9,7 +9,7 @@ Template.sprint.rendered = function() {
 
 Template.sprint.helpers({
   sprints: function(){
-    return sprintsCollection.find({});
+    return sprintsCollection.findOne({});
   },
   hasLists: function(){
     console.log('hasLists: ', this.lists.count());
@@ -19,8 +19,25 @@ Template.sprint.helpers({
       return false;
     }
   },
-  totalSprintItemCount: function(sprintId){
-    return itemsCollection.find({parentList: sprintId}).count();
+  totalSprintItemCount: function(){
+    console.log('this: ', this);
+    return itemsCollection.find({}).count();
+  },
+  totalSprintCompletedItemCount: function(){
+    console.log('this: ', this);
+    return itemsCollection.find({complete: true}).count();
+  },
+  totalSprintCompletePercentage: function(){
+    var totalItems = itemsCollection.find({}).count();
+    var completeItems = itemsCollection.find({complete: true}).count();
+    var totalPercentage = (completeItems/totalItems).toFixed(2);
+    return totalPercentage*100.00 >> 0;
+  },
+  startDatePretty: function(){
+    return moment(this.startDate).format('ll');
+  },
+  endDatePretty: function(){
+    return moment(this.endDate).format('ll');
   }
 });
 
@@ -42,12 +59,9 @@ Template.sprint.events({
   // },
   'click [data-action=removeListFromSprint]': function(event){
     event.preventDefault();
-    var status = listsCollection.remove(this._id);
-    if(typeof status != 'undefined'){
-      Materialize.toast('Sad to see you go...', 3000, 'green');
-    } else {
-      Materialize.toast('uh oh... there was a problem...', 3000, 'red')
-    }
+
+    Meteor.call('removeList', this._id);
+
   },
   // 'click [data-action=removeItem]': function(event){
   //   event.preventDefault();
@@ -72,7 +86,7 @@ Template.listItem.rendered = function() {
 Template.listItem.helpers({
   lists: function(){
     //need to refine to lists only in this sprint
-    return listsCollection.find({});
+    return listsCollection.find({parentSprint: sprintsCollection.findOne({})._id});
   },
   items: function(){
     return itemsCollection.find({parentList: this._id});
@@ -92,7 +106,6 @@ Template.listItem.helpers({
     return itemsCollection.find({parentList: this._id}).count();
   },
   completedItemCount: function(){
-    console.log('parentList id: ', this._id);
     return itemsCollection.find({parentList: this._id, complete: true}).count();
   }
 });

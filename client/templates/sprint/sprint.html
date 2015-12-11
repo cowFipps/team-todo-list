@@ -1,9 +1,10 @@
 <template name="sprint">
 
   <div class="container">
-    <h4 class="center">{{#each sprints}}{{startDate}} - {{endDate}}{{/each}}</h4>
-    {{ totalSprintItemCount this._id }}
+    <h4 class="center">{{#with sprints}}{{startDatePretty}} - {{endDatePretty}}{{/with}}</h4>
+
     {{#if hasLists}}
+    <h6 class="center">{{ totalSprintCompletedItemCount }}/{{ totalSprintItemCount }} - {{totalSprintCompletePercentage}}% Complete</h6>
       <ul class="collection">
         {{#each lists}}
           {{> listItem}}
