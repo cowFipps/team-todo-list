@@ -38,12 +38,14 @@ if(resourcesCollection.find().count() === 0){
   ]
 
   var raphaelId = resourcesCollection.insert({
-    name: 'Raphael'
+    name: 'Raphael',
+    resourceImage: 'images/yuna.jpg'
   });
 
   for (x = 0; x < users.length; x++) {
     resourcesCollection.insert({
-      name: users[x]
+      name: users[x],
+      resourceImage: 'images/yuna.jpg'
     })
   }
 

@@ -1,7 +1,7 @@
 <template name="sprint">
 
   <div class="container">
-    <h4 class="center">{{#with sprints}}{{startDatePretty}} - {{endDatePretty}}{{/with}}</h4>
+    <h5 class="center">{{#with sprints}}{{startDatePretty}} - {{endDatePretty}}{{/with}}</h5>
 
     {{#if hasLists}}
     <h6 class="center">{{ totalSprintCompletedItemCount }}/{{ totalSprintItemCount }} - {{totalSprintCompletePercentage}}% Complete</h6>
@@ -21,11 +21,15 @@
 </template>
 
 <template name="listItem">
-  <li class="collection-item avatar">
-    <img src="images/yuna.jpg" alt="" class="circle">
+  <li class="collection-item">
+    <!-- <img src="images/yuna.jpg" alt="" class="circle"> -->
     <span class="resourceName" style="font-size: 1.64rem; line-height: 110%;">{{ resourceName }}</span>
     <a href="#confirmRemove-{{_id}}" id="remove-list-{{_id}}" class="waves-effect waves-light modal-trigger" style="margin-left:10px">REMOVE</a>
-    <!-- <button data-target="modal1" class="btn modal-trigger">Modal</button> -->
+    {{#if totalItemCount}}
+      <span class="secondary-content">{{completedItemCount}}/{{totalItemCount}}</span>
+    {{else}}
+      <span class="secondary-content hide-on-med-and-down">no items yet.</span>
+    {{/if}}
     <br>
     <div id="confirmRemove-{{_id}}" class="modal">
       <div class="modal-content">
@@ -51,12 +55,7 @@
         </div>
       </div>
     {{/each}}
-    <a class="btn-floating btn-small waves-effect waves-light green left" data-action="addItem"><i class="material-icons left small">add</i>add</a>
+    <a class="btn-floating btn-small waves-effect waves-light green left add-item" data-action="addItem"><i class="material-icons left small">add</i>add</a>
     <!-- <a class="waves-effect waves-light btn" data-action="addItem"><i class="material-icons left">add</i>add item</a> -->
-    {{#if totalItemCount}}
-      <span class="secondary-content">{{completedItemCount}}/{{totalItemCount}}</span>
-    {{else}}
-      <span class="secondary-content hide-on-med-and-down">no items yet.</span>
-    {{/if}}
   </li>
 </template>
